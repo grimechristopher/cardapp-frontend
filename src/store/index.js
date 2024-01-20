@@ -66,9 +66,7 @@ export default createStore({
   },
   mutations: {
     UPDATE_Seats(state, data) {
-      console.log(1)
-      state.seats = data.filter(seat => seat.number !== 0);
-      state.dealer = data.find(seat => seat.number === 0);
+      state.seats = data;
     },
     UPDATE_User(state, data) {
       console.log('UPDATE_User', data);

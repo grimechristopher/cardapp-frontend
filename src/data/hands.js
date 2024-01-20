@@ -13,6 +13,6 @@ export default [
   },
   {
     id: 333,
-    seat: 33,
+    seat: 33, // This is a community/dealer seat
   }
 ]

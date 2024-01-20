@@ -4,7 +4,7 @@ import seats from '@/data/seats';
 import players from '@/data/players';
 import hands from '@/data/hands';
 import cards from '@/data/cards';
-import player from '@/data/player';
+import player from '@/data/user';
 
 export function joinRoom() {
   console.log('joinRoom');
