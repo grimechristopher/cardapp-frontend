@@ -1,7 +1,7 @@
 <template>
   <!-- Playing Cards have 3 sections. top-left corner, bottom-right corner, and the face. -->
   <!-- Cards can be face up or face down -->
-  <div v-if="props.card && props.card.value" class="playing-card" :class="`${color}-card`">
+  <div v-if="props.card && props.card.value" class="playing-card" :class="`${color}-card`" :ref="`playingCardRef`">
     <div class="top-left-corner">
       <div class="value">
         {{ rank }}
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="card-face">
-      {{  rank }}
+      {{ face }}
     </div>
     <div class="bottom-right-corner">
       <div class="value">
@@ -30,7 +30,7 @@
 <script setup>
 import { defineProps, ref, watch } from 'vue';
 
-const props = defineProps(['card']);
+const props = defineProps(['card', 'handIndex']);
 
 const suit = ref('');
 const color = ref('');
@@ -38,11 +38,26 @@ const rank = ref('');
 const face = ref('');
 const isFaceUp = ref(true);
 
+const playingCardRef = ref(null);
+
 setCard();
 
-watch (props.card, () => {
+
+watch(() => props.card, () => {
   setCard();
 });
+
+watch(() => playingCardRef.value, () => {
+  console.log(props.handIndex, playingCardRef.value)
+  if (props.handIndex && playingCardRef.value) {
+    playingCardRef.value.style.position = 'absolute';
+    playingCardRef.value.style.top = props.handIndex * 1.5 + 'rem';
+  }
+  else if (playingCardRef.value) {
+    playingCardRef.value.style.position = 'relative';
+  
+  }
+}, {immediate: true});
 
 function setCard() {
 
@@ -111,8 +126,10 @@ function setCard() {
   flex-direction: column;
   justify-content: space-between;
 
+  /* min-height: 100%; */
   height: 100%;
   width: auto;
+  max-width: 100%;
   aspect-ratio: 25/35;
 
   font-family: monospace;
@@ -123,14 +140,18 @@ function setCard() {
   border-radius: 6%;
   padding: 1px 3px;
 
-  font-size: 120%;
+  font-size: 140%;
 }
-
+.top-left-corner {
+  display: flex;
+  gap: 2px;
+}
 .card-face {
   align-self: center;
 }
 .bottom-right-corner {
-  display: block;
+  display: flex;
+  gap: 2px;
   transform: rotate(180deg);
 }
 

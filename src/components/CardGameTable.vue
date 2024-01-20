@@ -1,7 +1,7 @@
 <template>
-  <div class="card-game-table">
+  <div class="card-game-table" ref="cardGameTable">
     <!-- The Community Section holds the community cards (dealers hand, the flop) and deck-->
-    <div class="community-section">
+    <div class="community-section" ref="communitySection">
       <!-- Allow for multiple dealers/community seats. It is simpler to handle the data -->
       <CommunitySeat
         v-for="seat in communitySeat" :key="seat.id"
@@ -9,18 +9,21 @@
       />
       <CardGameDeck />
     </div>
-    <div class="players-section">
+    <div class="players-section" ref="playersSection">
       <!-- Row 2 is first to give the visual effect that player 1 is sitting at the table after the dealer-->
       <div class="player-row">
         <CardGameSeat 
           v-for="seat in playerSeatsRow2" :key="seat.id"
           :seat="seat"
+          :height="seatHeight"
         />
       </div>
       <div class="player-row">
         <CardGameSeat 
           v-for="seat in playerSeatsRow1" :key="seat.id"
           :seat="seat"
+          :height="seatHeight"
+          :rightSideRow="true"
         />
       </div>
     </div>
@@ -43,11 +46,19 @@ const playerSeatsRow1 = ref([]);
 const playerSeatsRow2 = ref([]);
 const communitySeat = ref({});
 
+const seatHeight = ref(0);
+const cardGameTable = ref(null);
+const communitySection = ref(null);
+const playersSection = ref(null);
+
+
 // In the Vuex store there is a list of 'seats' for the table. There are multiple player seats 1 of n and a single community/dealer seat
 // When the player joins a room the frontend needs to be updated with the current state of the table.
 // We will mock a socket event that will update the vuex store with the current state of the table.
 // After the store is updated the frontend needs to display the seats
 onMounted(() => {
+  window.addEventListener("resize", resizeCardGameTable);
+
   joinRoom();
   setSeats();
 })
@@ -65,6 +76,19 @@ function setSeats() {
   playerSeatsRow2.value = playerSeatsAll.value.slice(playerSeatsAll.value.length / 2, playerSeatsAll.value.length).reverse();
   // The second array is reversed to give the illusion that we are playing around a table. Clockwise. 
 
+
+  let maxSeatRowLength = Math.max(playerSeatsRow1.value.length, playerSeatsRow2.value.length);
+  // console.log('playerSection', playersSection.value.offsetHeight);
+  if (playersSection.value) {
+    // seatHeight.value = 0;
+    console.log("1", playersSection.value.offsetHeight)
+    seatHeight.value = playersSection.value.offsetHeight / maxSeatRowLength;
+  }
+  console.log("SeatHeight", seatHeight.value);
+}
+
+function resizeCardGameTable() {
+  setSeats();
 }
 
 </script>
@@ -77,30 +101,49 @@ function setSeats() {
 
   /* Game table should always be the size of the screen */
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 
-  background-color: aqua;
+  transform: translateX(0);
+  transform: translate(0);
+
+  /* background-color: #35654d; */
+  background-image: radial-gradient(#396d52, #264f3b);
+  border: 8px solid #474747;
+  border-radius: 12px;
+  /* background-color: aqua; */
 }
 
 /* The dealer section is the top portion of the screen */
 .community-section {
-  background-color: lightcoral;
-  width: 100%;
+  /* background-color: lightcoral; */
   display: flex;
   justify-content: space-between;
+
+  padding: 0.33rem;
+  /* border: 8px solid #71533d; */
+  border-bottom: 1px solid #808080;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .players-section {
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 1fr 1fr;
+  min-height: 0; /* Must set min height in order for grid to resize on page resize */
+  /* padding-bottom: 8px; */
 }
 
 .player-row {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  /* max-height: 100%; */
+  /* display: grid; */
+  /* Make all grid rows equal height but do not allow all to grow past parents height*/
+  /* grid-auto-rows: fit-content(minmax(0,1fr)); */
+  /* grid-auto-rows: repeat(auto-fit, 1fr); */
+  /* min-height: 0; */
+  /* flex-direction: column;
+  height: 100%; */
 }
 </style>

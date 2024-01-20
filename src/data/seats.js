@@ -23,7 +23,7 @@ export default [
   {
     id: 3,
     roomId: 1,
-    playerId: null,
+    playerId: 2,
     number: 3,
     nextPlayerId: null,
   },

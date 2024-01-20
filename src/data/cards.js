@@ -9,8 +9,11 @@ deck[34].handId = 201;
 deck[35].handId = 202;
 deck[51].handId = 202;
 deck[25].handId = 202;
+deck[29].handId = 203;
 deck[44].handId =  333;
 deck[47].handId =  333;
+deck[48].handId =  3;
+deck[19].handId =  3;
 
 function generateDeckOfCards() {
     const suits = ['spades', 'hearts', 'diamonds', 'clubs',];
