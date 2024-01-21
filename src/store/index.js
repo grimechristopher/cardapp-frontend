@@ -34,7 +34,6 @@ export default createStore({
   },
   actions: {
     updateRoom({ commit } , data ) { 
-      console.log(data)
       commit('UPDATE_Room', data);
     },
     updateUser({ commit }, data ) {
@@ -53,7 +52,6 @@ export default createStore({
       commit('UPDATE_Cards', data);
     },
     addCardToHand({ commit }, data ) {
-      console.log('addCardToHand', data);
       commit('addCardToHand', data);
     },
     setActiveTurn({ commit }, data ) {
@@ -62,18 +60,19 @@ export default createStore({
 
     sitPlayer({ commit }, data ) {
       commit('assignPlayerToSeat', data);
-    }
+    },
+    leaveSeat({ commit }, data ) {
+      commit('unnasignPlayerFromSeat', data);
+    },
   },
   mutations: {
     UPDATE_Seats(state, data) {
       state.seats = data;
     },
     UPDATE_User(state, data) {
-      console.log('UPDATE_User', data);
       state.user = data;
     },
     UPDATE_Room(state, data) {
-      console.log('UPDATE_Room', data);
       state.room = data;
     },
     UPDATE_Players(state, data) {
@@ -86,20 +85,12 @@ export default createStore({
       state.cards = data;
     },
     addCardToHand(state, data) {
-      const undeltCards = state.cards.filter(card => card.hand === null);
-      console.log(undeltCards)
+      const undeltCards = state.cards.filter(card => card.handId === null);
       let randomCard = undeltCards[(Math.floor(Math.random() * undeltCards.length))];
-      console.log(randomCard)
-      // dealCard.hand = data.handId;
       const cardIndex = state.cards.findIndex(card => card.id === randomCard.id);
-      console.log(cardIndex)
-      state.cards[cardIndex].hand = data.handId;
+      state.cards[cardIndex].handId = data.handId;
     },
     setActiveTurn(state, data) {
-      console.log('setActiveTurn', data);
-      const seatIndex = state.seats.findIndex(seat => seat.id === data.seatId);
-      console.log(seatIndex)
-      // state.seats[seatIndex].status = 'playing';
       state.room.activeSeat = data.seatId;
       state.room.activeTurnTime = 30;
 
@@ -115,14 +106,21 @@ export default createStore({
       }, 1000);
     },
     assignPlayerToSeat(state, data) {
-      console.log('assignPlayerToSeat', data);
       const seatIndex = state.seats.findIndex(seat => seat.id === data.seatId);
-      console.log(seatIndex)
-      state.seats[seatIndex].player = state.user.id;
-      console.log(state.seats)
+      state.seats[seatIndex].playerId = state.user.id;
       state.players.push(state.user)
       state.user.seat = data.seatId;
-    }
+    },
+    unnasignPlayerFromSeat(state, data) {
+      if (state.user.seat !== data.seatId) {
+        return;
+      }
+      const seatIndex = state.seats.findIndex(seat => seat.id === data.seatId);
+      state.seats[seatIndex].playerId = null;
+      state.players = state.players.filter(player => player.id !== state.user.id);
+      state.user.seat = null;
+    },
+
 
   },
 })

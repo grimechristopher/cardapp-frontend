@@ -32,34 +32,23 @@ function setCards() {
 
 <style scoped>
 .hand {
-  /* flex-direction: row-reverse; */
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  /* align-items: stretch; */
   min-height: 75%;
   max-height: 75%;
-}
-
-.right-side {
-  /* display: block; */
 }
 .card-container {
   display: flex;
   min-height: 100%;
   height: 100%;
   max-height: 100%;
-  /* width: 100%; */
   position: relative;
 }
 
 .container-right {
   flex-direction: row-reverse;
 }
-/* .card-container > div:not(:first-child) {
-  position: relative;
-  margin-top: -50%;
-} */
 
 </style>

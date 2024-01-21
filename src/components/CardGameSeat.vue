@@ -2,12 +2,12 @@
   <div class="seat" ref="seatRef" :class="{'seat-right': props.rightSideRow}" >
     <div class="seat-info">
       <div class="seat-header" :class="{'right-side': props.rightSideRow}">
-        <span>{{ props.seat.number }}</span>&nbsp;
-        <span v-if="player">{{ player.username }}</span>
-        <span v-else><button>+</button></span>
+        <span v-html="numberCircle" @click="setActiveSeat"></span>&nbsp;
+        <span v-if="player" @click="removeFromSeat">{{ player.username }}</span>
+        <span v-else-if="!store.state.user.seat"><button @click="takeSeat">+</button></span>
       </div>
       <div class="timer">
-  
+        <progress v-if="isActiveSeat()" :id="`seat${props.seat.id}_progress`" :value="store.state.room.activeTurnTime" max="30"> {{ store.state.room.activeTurnTime }}</progress>
       </div>
     </div>
       <div class="hands-container" >
@@ -25,6 +25,7 @@
 import CardGameHand from './CardGameHand.vue';
 import { defineProps, ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { setActiveTurn, joinSeat, leaveSeat} from '../socket.js';
 
 const props = defineProps(['seat', 'height', 'rightSideRow']);
 const store = useStore();
@@ -32,11 +33,14 @@ const store = useStore();
 const player = ref({});
 const hands = ref([]);
 
+const numberCircle = ref('');
+
+numberCircle.value = `&#${9311 + props.seat.number};` // Fun way to get unicode characters :)
+
 const seatRef = ref(null);
 
 setPlayer();
 watch (store.state.players, () => {
-  console.log(store.state.players);
   setPlayer();
 })
 function setPlayer() {
@@ -45,7 +49,6 @@ function setPlayer() {
 
 setHands();
 watch (store.state.hands, () => {
-  console.log(store.state.hands);
   setHands();
 });
 function setHands() {
@@ -61,11 +64,34 @@ watch(() => props.height, () => {
 onMounted(()=> {
   seatRef.value.style.height = props.height + 'px';
 })
+
+function setActiveSeat() {
+  setActiveTurn(props.seat.id)
+}
+
+function isActiveSeat() {
+  if (store.state.room.activeSeat === props.seat.id) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function takeSeat() {
+  joinSeat(props.seat.id);
+}
+
+function removeFromSeat() {
+  leaveSeat(props.seat.id);
+}
+
 </script>
 
 <style scoped>
 .seat {
-  /* border-bottom: 1px solid #808080; */
+  color: #fefefe;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden;
 
   display: flex;
@@ -73,44 +99,49 @@ onMounted(()=> {
   max-height: 100%;
 
   margin: 0.7rem;
-  /* border-top: 1px solid #fefefe; */
-  /* border-bottom: 1px solid #fefefe; */
-  /* border-top-left-radius: 25%; */
-  /* border-bottom-left-radius: 25%; */
+  padding-left: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #fefefe;
+  border-left: 1px solid #fefefe;
+  border-bottom-left-radius: 12.5%;
 
 }
 
+.seat-right {
+  padding-left: 0;
+  padding-right: 0.25rem;
+  border-left: 0;
+  border-right: 1px solid #fefefe;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 12.5%;
+}
+
+.seat-header {
+  padding-bottom: 2px;
+}
 
 .right-side {
   display: flex;
-  /* align-items: flex-end; */
   flex-direction: row-reverse;
-  /* flex-direction: column-reverse; */
-  /* flex-direction: column-reverrse; */
-
 }
 .seat-hands {
   flex-shrink: 1;
   min-height: 0;
 }
 .hands-container {
-  /* height: 100%; */
-  /* flex: 0 1 auto; */
   flex-shrink: 1;
   flex-grow: 0;
   min-height: 100%;
   max-height: 100%;
 
   display: flex;
-
-  /* width: 20%; */
-  /* display: flex;
-  flex-wrap: wrap;
-  flex-direction: column; */
 }
 
 .right-container {
   flex-direction: row-reverse;
 }
 
+progress {
+  width:100%;
+}
 </style>

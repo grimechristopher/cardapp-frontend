@@ -78,13 +78,9 @@ function setSeats() {
 
 
   let maxSeatRowLength = Math.max(playerSeatsRow1.value.length, playerSeatsRow2.value.length);
-  // console.log('playerSection', playersSection.value.offsetHeight);
   if (playersSection.value) {
-    // seatHeight.value = 0;
-    console.log("1", playersSection.value.offsetHeight)
-    seatHeight.value = playersSection.value.offsetHeight / maxSeatRowLength;
+    seatHeight.value = (playersSection.value.offsetHeight - 48) / maxSeatRowLength;
   }
-  console.log("SeatHeight", seatHeight.value);
 }
 
 function resizeCardGameTable() {
@@ -107,43 +103,24 @@ function resizeCardGameTable() {
   transform: translateX(0);
   transform: translate(0);
 
-  /* background-color: #35654d; */
   background-image: radial-gradient(#396d52, #264f3b);
   border: 8px solid #474747;
   border-radius: 12px;
-  /* background-color: aqua; */
 }
 
 /* The dealer section is the top portion of the screen */
 .community-section {
-  /* background-color: lightcoral; */
   display: flex;
   justify-content: space-between;
 
-  padding: 0.33rem;
-  /* border: 8px solid #71533d; */
-  border-bottom: 1px solid #808080;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  padding: 0.5rem;
+
 }
 
 .players-section {
-  /* background-color: aquamarine; */
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 1fr 1fr;
   min-height: 0; /* Must set min height in order for grid to resize on page resize */
-  /* padding-bottom: 8px; */
-}
-
-.player-row {
-  /* max-height: 100%; */
-  /* display: grid; */
-  /* Make all grid rows equal height but do not allow all to grow past parents height*/
-  /* grid-auto-rows: fit-content(minmax(0,1fr)); */
-  /* grid-auto-rows: repeat(auto-fit, 1fr); */
-  /* min-height: 0; */
-  /* flex-direction: column;
-  height: 100%; */
 }
 </style>

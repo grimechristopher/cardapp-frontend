@@ -7,7 +7,6 @@ import cards from '@/data/cards';
 import player from '@/data/user';
 
 export function joinRoom() {
-  console.log('joinRoom');
   // mock room info
   const room = {
     id: 1000,
@@ -24,7 +23,6 @@ export function joinRoom() {
 }
 
 export function addCardToHand(handId) {
-  console.log('Made to socket');
   store.dispatch('addCardToHand', { handId } );
 }
 
@@ -33,7 +31,9 @@ export function setActiveTurn(seatId) {
 }
 
 export function joinSeat(seatId) {
-  console.log('joinSeat in socket')
   store.dispatch('sitPlayer', { seatId } );
 }
 
+export function leaveSeat(seatId) {
+  store.dispatch('leaveSeat', { seatId } );
+}

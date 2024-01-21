@@ -31,5 +31,6 @@ function setCards() {
 .community-hand {
   display: flex;
   flex-grow: 1;
+  align-items: center;
 }
 </style>

@@ -48,7 +48,17 @@ watch(() => props.card, () => {
 });
 
 watch(() => playingCardRef.value, () => {
-  console.log(props.handIndex, playingCardRef.value)
+  if (props.handIndex && playingCardRef.value) {
+    playingCardRef.value.style.position = 'absolute';
+    playingCardRef.value.style.top = props.handIndex * 1.5 + 'rem';
+  }
+  else if (playingCardRef.value) {
+    playingCardRef.value.style.position = 'relative';
+  
+  }
+}, {immediate: true});
+
+watch(() => props.handIndex, () => {
   if (props.handIndex && playingCardRef.value) {
     playingCardRef.value.style.position = 'absolute';
     playingCardRef.value.style.top = props.handIndex * 1.5 + 'rem';
@@ -126,10 +136,8 @@ function setCard() {
   flex-direction: column;
   justify-content: space-between;
 
-  /* min-height: 100%; */
-  height: 100%;
+  height: 4.5rem;
   width: auto;
-  max-width: 100%;
   aspect-ratio: 25/35;
 
   font-family: monospace;
