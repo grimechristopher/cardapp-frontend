@@ -36,7 +36,7 @@ import CardGameDeck from './CardGameDeck.vue';
 import CardGameSeat from './CardGameSeat.vue';
 
 import { ref, onMounted } from 'vue';
-import { joinRoom } from '../../socket';
+// import { joinRoom } from '../../socket';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -59,7 +59,7 @@ const playersSection = ref(null);
 onMounted(() => {
   window.addEventListener("resize", resizeCardGameTable);
 
-  joinRoom();
+  // joinRoom();
   setSeats();
 })
 

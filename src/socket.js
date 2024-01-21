@@ -7,6 +7,7 @@ import cards from '@/data/cards';
 import player from '@/data/user';
 
 export function joinRoom() {
+  console.log('joinRoom');
   // mock room info
   const room = {
     id: 1000,

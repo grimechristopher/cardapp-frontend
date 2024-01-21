@@ -1,18 +1,14 @@
 <template>
   <div class="room-list">
-    <button @click="closeList()">Close List</button>
+    <RouterLink v-if="store.state.room" :to="{ name: 'CardGameTable', params: {
+      roomId: store.state.room.id
+    } }">Close List</RouterLink>
   </div>
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-
-const emit = defineEmits(['closeList']);
-
-function closeList() {
-  emit('closeList');
-}
-
+import { useStore } from 'vuex';
+const store = useStore();
 </script>
 
 <style scoped>

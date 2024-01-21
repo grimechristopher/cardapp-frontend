@@ -1,14 +1,7 @@
 <template>
   <div>
-    <button @click="goToRoomList()">Rooms</button>
+    <RouterLink :to="{ name: 'RoomList' }">Rooms</RouterLink>
   </div>
 </template>
 <script setup> 
-import { defineEmits } from 'vue';
-
-const emit = defineEmits(['goToRoomList']);
-
-function goToRoomList() {
-  emit('goToRoomList');
-}
 </script>
