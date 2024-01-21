@@ -36,7 +36,7 @@ import CardGameDeck from './CardGameDeck.vue';
 import CardGameSeat from './CardGameSeat.vue';
 
 import { ref, onMounted } from 'vue';
-import { joinRoom } from '../socket';
+import { joinRoom } from '../../socket';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -97,7 +97,7 @@ function resizeCardGameTable() {
 
   /* Game table should always be the size of the screen */
   width: 100vw;
-  height: 100dvh;
+  height: 100%;
   overflow: hidden;
 
   transform: translateX(0);
@@ -122,5 +122,8 @@ function resizeCardGameTable() {
   grid-auto-flow: column;
   grid-template-columns: 1fr 1fr;
   min-height: 0; /* Must set min height in order for grid to resize on page resize */
+  max-width: 100%;
+}
+.player-row {
 }
 </style>

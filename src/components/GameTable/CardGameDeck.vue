@@ -26,7 +26,7 @@
 import ModalComponent from './ModalComponent.vue';
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import { addCardToHand } from '../socket.js';
+import { addCardToHand } from '../../socket.js';
 
 const store = useStore();
 

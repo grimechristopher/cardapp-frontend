@@ -37,3 +37,7 @@ export function joinSeat(seatId) {
 export function leaveSeat(seatId) {
   store.dispatch('leaveSeat', { seatId } );
 }
+
+export function splitHand(handId) {
+  store.dispatch('splitHand', { handId } );
+}

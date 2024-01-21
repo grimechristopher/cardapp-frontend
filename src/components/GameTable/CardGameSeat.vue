@@ -25,7 +25,7 @@
 import CardGameHand from './CardGameHand.vue';
 import { defineProps, ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { setActiveTurn, joinSeat, leaveSeat} from '../socket.js';
+import { setActiveTurn, joinSeat, leaveSeat} from '../../socket.js';
 
 const props = defineProps(['seat', 'height', 'rightSideRow']);
 const store = useStore();
@@ -43,6 +43,7 @@ setPlayer();
 watch (store.state.players, () => {
   setPlayer();
 })
+
 function setPlayer() {
   player.value = store.state.players.find(player => player.id === props.seat.playerId);
 }
@@ -133,6 +134,7 @@ function removeFromSeat() {
   flex-grow: 0;
   min-height: 100%;
   max-height: 100%;
+  overflow: hidden;
 
   display: flex;
 }

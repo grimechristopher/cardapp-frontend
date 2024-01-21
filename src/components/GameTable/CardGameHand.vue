@@ -1,6 +1,6 @@
 <template>
   <div class="hand" :title="'handId: ' + hand.id">
-    <div class="card-container" :class="{'container-right': props.rightSideRow}">
+    <div class="card-container" :class="{'container-right': props.rightSideRow}" @click="split">
       <PlayingCard
         v-for="(card, index) in cards" :key="card.suit+card.value"
         :card="card"
@@ -14,6 +14,7 @@
 import PlayingCard from './PlayingCard.vue';
 import { defineProps, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+import { splitHand } from '../../socket.js';
 
 const props = defineProps(['hand', 'rightSideRow']);
 
@@ -28,7 +29,14 @@ watch (store.state.cards, () => {
 function setCards() {
   cards.value = store.state.cards.filter(card => card.handId === props.hand.id);
 }
+
+function split() {
+  if (cards.value.length === 2) {
+    splitHand(props.hand.id);
+  }
+}
 </script>
+
 
 <style scoped>
 .hand {

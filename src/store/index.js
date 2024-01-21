@@ -64,6 +64,9 @@ export default createStore({
     leaveSeat({ commit }, data ) {
       commit('unnasignPlayerFromSeat', data);
     },
+    splitHand({ commit }, data ) {
+      commit('splitHand', data);
+    }
   },
   mutations: {
     UPDATE_Seats(state, data) {
@@ -120,7 +123,23 @@ export default createStore({
       state.players = state.players.filter(player => player.id !== state.user.id);
       state.user.seat = null;
     },
-
+    splitHand(state, data) {
+      // Get hands seat
+      const handIndex = state.hands.findIndex(hand => hand.id === data.handId);
+      const hand = state.hands[handIndex];
+      // Add new hand and assign to seat
+      let newHand = { 
+        id: state.hands.length + 12344,
+        seat: hand.seat,
+      }
+      state.hands.push(newHand)
+      // Get cards in hand
+      const cardsInHand = state.cards.filter(card => card.handId === data.handId);
+      // Move second card to new hand
+      const secondCardIndex = state.cards.findIndex(card => card.id === cardsInHand[1].id);
+      state.cards[secondCardIndex].handId = newHand.id;
+      // Done.
+    }
 
   },
 })
