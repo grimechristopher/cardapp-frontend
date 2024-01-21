@@ -6,7 +6,7 @@
       <CommunitySeat
         v-for="seat in communitySeat" :key="seat.id"
         :seat="seat"
-      />
+      />{{  room?.name }}
       <CardGameDeck />
     </div>
     <div class="players-section" ref="playersSection">
@@ -34,9 +34,9 @@
 import CommunitySeat from './CommunitySeat.vue';
 import CardGameDeck from './CardGameDeck.vue';
 import CardGameSeat from './CardGameSeat.vue';
+import { socket } from '@/socket';
 
 import { ref, onMounted } from 'vue';
-// import { joinRoom } from '../../socket';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -50,7 +50,7 @@ const seatHeight = ref(0);
 const cardGameTable = ref(null);
 const communitySection = ref(null);
 const playersSection = ref(null);
-
+const room = ref(null);
 
 // In the Vuex store there is a list of 'seats' for the table. There are multiple player seats 1 of n and a single community/dealer seat
 // When the player joins a room the frontend needs to be updated with the current state of the table.
@@ -59,7 +59,8 @@ const playersSection = ref(null);
 onMounted(() => {
   window.addEventListener("resize", resizeCardGameTable);
 
-  // joinRoom();
+  socket.emit('joinRoom', { roomId: 1 });
+
   setSeats();
 })
 
@@ -123,7 +124,5 @@ function resizeCardGameTable() {
   grid-template-columns: 1fr 1fr;
   min-height: 0; /* Must set min height in order for grid to resize on page resize */
   max-width: 100%;
-}
-.player-row {
 }
 </style>

@@ -1,3 +1,4 @@
+import io from 'socket.io-client'
 import store from '@/store/index';
 
 import seats from '@/data/seats';
@@ -5,6 +6,29 @@ import players from '@/data/players';
 import hands from '@/data/hands';
 import cards from '@/data/cards';
 import player from '@/data/user';
+
+const URL = process.env.NODE_ENV === "production" ? window.location : "http://localhost:3000";
+
+export const socket = io(URL, {
+  autoConnect: false,
+  auth: {
+    token: "Test"
+  }
+});
+
+// Connection
+socket.on("connect", () => {
+  console.log("connected");
+});
+
+socket.on("updateRoomList", (data) => {
+  store.dispatch('updateRoomList', data);
+});
+
+socket.on("userJoined Announcment", (data) => {
+  console.log('joined ROOM', data)
+});
+
 
 export function joinRoom() {
   console.log('joinRoom');
