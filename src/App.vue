@@ -1,13 +1,13 @@
 <template>
-  <NavigationBar 
-      @goToRoomList="showRoomList = !showRoomList"
-  />
+  <NavigationBar/>
   <router-view></router-view>
 </template>
 
 <script>
 import NavigationBar from './components/Layout/NavigationBar.vue'
 import { socket, joinRoom } from './socket';
+
+import { useStore } from 'vuex';
 
 export default {
   name: 'App',
@@ -19,12 +19,19 @@ export default {
       showRoomList: false
     }
   },
+  created() {
+    const store = useStore();
+    store.commit('initializeStore');
+    store.subscribe((mutation, state) => {
+      localStorage.setItem('store', JSON.stringify(state));
+    });
+  },  
   mounted() {
     socket.connect();
     joinRoom();
   },
   methods: {
-
+    
   }
 }
 </script>
