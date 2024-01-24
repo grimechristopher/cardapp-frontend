@@ -1,33 +1,37 @@
 <template>
-  <NavigationBar 
-      @goToRoomList="showRoomList = !showRoomList"
-  />
-  <RoomList 
-    v-if="showRoomList"
-    @closeList="showRoomList = false"
-  />
-  <CardGameTable />
+  <NavigationBar/>
+  <router-view></router-view>
 </template>
 
 <script>
 import NavigationBar from './components/Layout/NavigationBar.vue'
-import RoomList from './components/RoomList/RoomList.vue'
-import CardGameTable from './components/GameTable/CardGameTable.vue'
+import { socket } from './socket';
+
+import { useStore } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     NavigationBar,
-    RoomList,
-    CardGameTable
   },
   data() {
     return {
       showRoomList: false
     }
   },
+  created() {
+    const store = useStore();
+    store.commit('initializeStore');
+    store.subscribe((mutation, state) => {
+      localStorage.setItem('store', JSON.stringify(state));
+    });
+  },  
+  mounted() {
+    socket.connect();
+    // joinRoom();
+  },
   methods: {
-
+    
   }
 }
 </script>

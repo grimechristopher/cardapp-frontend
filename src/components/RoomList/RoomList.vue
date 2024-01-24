@@ -1,17 +1,36 @@
 <template>
   <div class="room-list">
-    <button @click="closeList()">Close List</button>
+    <RouterLink v-if="store.state.room" :to="{ name: 'CardGameTable', params: {
+      roomId: store.state.room.id
+    } }">Close List</RouterLink>
+    <div>
+      <RoomListItem 
+        v-for="room in roomList" :key="room.id"
+        :room="room"
+      />
+      {{ roomList }}
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
+import { ref, watch } from 'vue';
+import { useStore, } from 'vuex';
 
-const emit = defineEmits(['closeList']);
+import RoomListItem from './RoomListItem.vue';
 
-function closeList() {
-  emit('closeList');
-}
+const store = useStore();
+
+import { socket } from '@/socket';
+
+socket.emit('getRoomList');
+
+const roomList = ref([]);
+
+watch( () => store.state.rooms, () => {
+  console.log('roomList', store.state.rooms);
+  roomList.value = store.state.rooms;
+}, { immediate: true })
 
 </script>
 

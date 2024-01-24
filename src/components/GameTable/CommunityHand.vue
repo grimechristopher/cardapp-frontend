@@ -23,7 +23,7 @@ watch (store.state.cards, () => {
   setCards();
 });
 function setCards() {
-  cards.value = store.state.cards.filter(card => card.handId === props.hand.id);
+  cards.value = store.state.cards.filter(card => card.hand_id === props.hand.id);
 }
 </script>
 

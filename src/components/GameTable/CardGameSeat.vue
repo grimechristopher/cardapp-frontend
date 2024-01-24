@@ -45,7 +45,8 @@ watch (store.state.players, () => {
 })
 
 function setPlayer() {
-  player.value = store.state.players.find(player => player.id === props.seat.playerId);
+  player.value = null;
+  // player.value = store.state.players.find(player => player.id === props.seat.playerId);
 }
 
 setHands();

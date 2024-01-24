@@ -6,7 +6,7 @@
       <CommunitySeat
         v-for="seat in communitySeat" :key="seat.id"
         :seat="seat"
-      />
+      />{{  room?.name }}
       <CardGameDeck />
     </div>
     <div class="players-section" ref="playersSection">
@@ -34,12 +34,14 @@
 import CommunitySeat from './CommunitySeat.vue';
 import CardGameDeck from './CardGameDeck.vue';
 import CardGameSeat from './CardGameSeat.vue';
+import { socket } from '@/socket';
 
-import { ref, onMounted } from 'vue';
-import { joinRoom } from '../../socket';
+import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 const store = useStore();
+const route = useRoute();
 
 const playerSeatsAll = ref([]);
 const playerSeatsRow1 = ref([]);
@@ -50,7 +52,7 @@ const seatHeight = ref(0);
 const cardGameTable = ref(null);
 const communitySection = ref(null);
 const playersSection = ref(null);
-
+const room = ref(null);
 
 // In the Vuex store there is a list of 'seats' for the table. There are multiple player seats 1 of n and a single community/dealer seat
 // When the player joins a room the frontend needs to be updated with the current state of the table.
@@ -59,13 +61,19 @@ const playersSection = ref(null);
 onMounted(() => {
   window.addEventListener("resize", resizeCardGameTable);
 
-  joinRoom();
+  socket.emit('joinRoom', { roomId: route.params.roomId });
+
   setSeats();
 })
+
+watch( () => store.state.seats, () => {
+  setSeats();
+});
 
 // A function is used to set the seats to create two rows of seats and also seperate the community seat from the player seats.
 // Assumption: The seats in the store dont change after the room is created or midgame.
 function setSeats() {
+  console.log(store.state.seats)
   playerSeatsAll.value = store.state.seats.filter(seat => seat.number !== 0); // copy the seats from the store, excluding the community seat
   communitySeat.value = store.state.seats.filter(seat => seat.number === 0); // copy the community seat from the store
 
@@ -123,7 +131,5 @@ function resizeCardGameTable() {
   grid-template-columns: 1fr 1fr;
   min-height: 0; /* Must set min height in order for grid to resize on page resize */
   max-width: 100%;
-}
-.player-row {
 }
 </style>

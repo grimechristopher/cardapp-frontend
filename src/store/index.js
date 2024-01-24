@@ -5,6 +5,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    // The game will have multiple rooms at once 
+    rooms: [],
     // Seats will be an array of the current room's seats
     seats: [],
     // Each active player has a hand, hands are generated as soon as a round starts
@@ -33,6 +35,11 @@ export default createStore({
     
   },
   actions: {
+    updateRoomList({ commit }, data ) {
+      commit('UPDATE_RoomList', data);
+    },
+
+
     updateRoom({ commit } , data ) { 
       commit('UPDATE_Room', data);
     },
@@ -69,6 +76,19 @@ export default createStore({
     }
   },
   mutations: {
+    initializeStore(state) {
+			if(localStorage.getItem('store')) {
+				// Replace the state object with the stored item
+				this.replaceState(
+					Object.assign(state, JSON.parse(localStorage.getItem('store')))
+				);
+			}
+    },
+    UPDATE_RoomList(state, data) {
+      console.log("UPDATE_RoomList", data)
+      state.rooms = data;
+    },
+
     UPDATE_Seats(state, data) {
       state.seats = data;
     },

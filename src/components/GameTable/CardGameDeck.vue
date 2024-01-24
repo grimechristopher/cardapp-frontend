@@ -36,11 +36,12 @@ const selectedHand = ref(null);
 
 setDeckLength();
 function setDeckLength() {
-  deckLength.value = store.state.cards.filter(card => card.handId === null).length;
+  console.log('setDeckLength')
+  deckLength.value = store.state.cards.filter(card => card.hand_id === null).length;
 }
-watch (store.state.cards, () => {
+watch (store.state, () => {
   setDeckLength();
-});
+}, {immediate: true, deep: true});
 
 function dealCard() {
   addCardToHand(selectedHand.value);
