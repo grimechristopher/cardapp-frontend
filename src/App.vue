@@ -5,7 +5,7 @@
 
 <script>
 import NavigationBar from './components/Layout/NavigationBar.vue'
-import { socket, joinRoom } from './socket';
+import { socket } from './socket';
 
 import { useStore } from 'vuex';
 
@@ -28,7 +28,7 @@ export default {
   },  
   mounted() {
     socket.connect();
-    joinRoom();
+    // joinRoom();
   },
   methods: {
     

@@ -29,6 +29,15 @@ socket.on("userJoined Announcment", (data) => {
   console.log('joined ROOM', data)
 });
 
+socket.on("updateGame", (data) => {
+  store.dispatch('updateRoom', data.room);
+  store.dispatch('updateSeats', data.seats);
+  store.dispatch('updateCards', data.cards);
+  store.dispatch('updateHands', data.hands);
+  // store.dispatch('updateAccounts', data.players);
+  console.log('updateGame', data);
+});
+
 
 export function joinRoom() {
   console.log('joinRoom');
