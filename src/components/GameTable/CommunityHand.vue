@@ -19,9 +19,9 @@ const store = useStore();
 const cards = ref([]);
 setCards();
 
-watch (store.state.cards, () => {
+watch (store.state, () => {
   setCards();
-});
+}, {deep: true});
 function setCards() {
   cards.value = store.state.cards.filter(card => card.hand_id === props.hand.id);
 }

@@ -3,8 +3,8 @@
     <div class="seat-info">
       <div class="seat-header" :class="{'right-side': props.rightSideRow}">
         <span v-html="numberCircle" @click="setActiveSeat"></span>&nbsp;
-        <span v-if="player" @click="removeFromSeat">{{ player.username }}</span>
-        <span v-else-if="!store.state.user.seat"><button @click="takeSeat">+</button></span>
+        <span v-if="props.seat.username" @click="removeFromSeat">{{ props.seat.username }}</span> 
+        <span v-else-if="!store.state.user.seat"><button @click="takeSeat">+</button></span> {{ store.state.user }}
       </div>
       <div class="timer">
         <progress v-if="isActiveSeat()" :id="`seat${props.seat.id}_progress`" :value="store.state.room.activeTurnTime" max="30"> {{ store.state.room.activeTurnTime }}</progress>
@@ -25,10 +25,12 @@
 import CardGameHand from './CardGameHand.vue';
 import { defineProps, ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { setActiveTurn, joinSeat, leaveSeat} from '../../socket.js';
+import { setActiveTurn, leaveSeat} from '../../socket.js';
+import { useRouter } from 'vue-router';
 
 const props = defineProps(['seat', 'height', 'rightSideRow']);
 const store = useStore();
+const router = useRouter();
 
 const player = ref({});
 const hands = ref([]);
@@ -50,11 +52,11 @@ function setPlayer() {
 }
 
 setHands();
-watch (store.state.hands, () => {
+watch (store.state, () => {
   setHands();
-});
+}), {deep: true};
 function setHands() {
-  hands.value = store.state.hands.filter(hand => hand.seat === props.seat.id);
+  hands.value = store.state.hands.filter(hand => hand.seat_id === props.seat.id);
 }
 
 watch(() => props.height, () => {
@@ -81,7 +83,16 @@ function isActiveSeat() {
 }
 
 function takeSeat() {
-  joinSeat(props.seat.id);
+  console.log('takeSeat', store.state.user)
+  if (!store.state.user.username) {
+    router.push({ name: 'LoginPage' });
+  }
+  else {
+    // joinSeat(props.seat.id);
+    console.log("WUT")
+  }
+
+  // joinSeat(props.seat.id);
 }
 
 function removeFromSeat() {
