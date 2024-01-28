@@ -21,11 +21,11 @@ const hands = ref([]);
 
 // the community cards hands need to be updated on screen whenever they change so a watch is used.
 // A dealer could have multiple hands a game could have multiple sets of community cards so we allow the flexibilty of multiple hands.
-watch (store.state.hands, () => {
+watch (store.state, () => {
   setHands();
 }, {deep: true});
 function setHands() {
-  hands.value = store.state.hands.filter(hand => hand.seat === props.seat.id);
+  hands.value = store.state.hands.filter(hand => hand.seat_id === props.seat.id);
 }
 
 // Call setHands on initial load

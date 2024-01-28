@@ -44,6 +44,7 @@ export default createStore({
       commit('UPDATE_Room', data);
     },
     updateUser({ commit }, data ) {
+      console.log("UPDATEING USER", data)
       commit('UPDATE_User', data);
     },
     updateSeats({ commit }, data ) {
@@ -56,6 +57,7 @@ export default createStore({
       commit('UPDATE_Hands', data);
     },
     updateCards({ commit }, data ) {
+      console.log("updateCards", data)
       commit('UPDATE_Cards', data);
     },
     addCardToHand({ commit }, data ) {

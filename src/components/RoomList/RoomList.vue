@@ -1,9 +1,9 @@
 <template>
   <div class="room-list">
-    <RouterLink v-if="store.state.room" :to="{ name: 'CardGameTable', params: {
+    <RouterLink v-if="store.state.room.id" :to="{ name: 'CardGameTable', params: {
       roomId: store.state.room.id
     } }">Close List</RouterLink>
-    <div>
+    <div v-if="roomList.length > 0">
       <RoomListItem 
         v-for="room in roomList" :key="room.id"
         :room="room"
@@ -27,10 +27,10 @@ socket.emit('getRoomList');
 
 const roomList = ref([]);
 
-watch( () => store.state.rooms, () => {
+watch( () => store.state, () => {
   console.log('roomList', store.state.rooms);
   roomList.value = store.state.rooms;
-}, { immediate: true })
+}, { immediate: true, deep: true})
 
 </script>
 

@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+import store from '@/store';
 import { ref } from 'vue';
 
 const email = ref('');
@@ -38,6 +39,8 @@ async function loginUser() {
 
   if (response.status === 200) {
     console.log('success');
+    // console.log(await response.json());
+    store.dispatch('updateUser', await response.json());
     errorMessage.value = '';
   } else {
     errorMessage.value = await response.text();
